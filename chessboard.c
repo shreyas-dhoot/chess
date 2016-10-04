@@ -23,8 +23,6 @@ int main() {
 	noecho();
 	keypad(stdscr, TRUE);
 	wbkgd(stdscr, COLOR_PAIR(1));
-	printw("Lines (y)-> %d\n", LINES);
-	printw("Columns (x)-> %d\n", COLS);
 	refresh();
 	char min = ((2 * LINES) > COLS) ? 'c' : 'l';
 	if (min == 'l') {	//deciding the width and height of the square of chessboard
@@ -42,7 +40,7 @@ int main() {
 			else									//black color
 				col = 0;
 			window[i - 1][j - 1] = create_newwin(s, s, starty, startx, col, i, j);
-			mvwprintw(window[i -1][j - 1], ((s / 2) - 1), (s - 2), "%s \n%d %d\n", pp[i -1][j - 1], startx, starty);
+			mvwprintw(window[i -1][j - 1], ((s / 2) - 1), (s - 2), "%s", pp[i -1][j - 1]);
 			wrefresh(window[i - 1][j - 1]);
 			startx = startx + (2 * s) - 1;	// -1 to overlap squares.
 //			usleep(2000000);
