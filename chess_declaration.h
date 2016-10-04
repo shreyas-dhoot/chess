@@ -25,7 +25,12 @@ typedef struct knight {
 	int *fm[9];
 }knight;
 typedef struct pawn {
-	int col
+	int col;
 	int cp[2];		//Current position
 	int *fm[4];
-}
+}pawn;
+typedef struct input {
+	int player;
+	char piece[3];
+}input;
+char ***pp;
