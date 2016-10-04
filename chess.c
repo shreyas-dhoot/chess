@@ -16,4 +16,3 @@ void input() {
 int verify_move() {
 }
 
-
