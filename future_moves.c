@@ -2,10 +2,18 @@
 	//Initialise fm than add moves to it.
 //store k in the last box.
 //k will store no. of moves.
+#include "future_moves.h"
+int **store_future_move_king(int px, int py, int i, int j, int **fm, char ***pp) {
+	int k = fm[11][0];
+	if(pp[i][j][0] == '\0' || pp[px][py][0] != pp[i][j][0]) {
+		fm[k][0] = i;
+		fm[k][1] = j;
+		(fm[11][0])++;
+	}
+	return fm;
+}
 
-int **store_future_move_king(int px, int py, int i, int j, int **fm, char ***pp)
-
-void future_move_king(int px, int py, int *fm) {			//Input present co - ordinates of the piece
+int **future_move_king(int px, int py, int **fm, char ***pp) {			//Input present co - ordinates of the piece
 	fm[11][0] = 0;
 	if(check_in_board(px + 1, py)) {
 		fm = store_future_move_king(px, py, px + 1, py, fm, pp);
@@ -192,8 +200,7 @@ int **store_future_move_knight(int px, int py,int i, int j, int **fm, char ***pp
 	}
 	return fm;
 }
-
-void future_move_knight(int px, int py, int **fm, char ***pp) {
+int **future_move_knight(int px, int py, int **fm, char ***pp) {
 	fm[8][0] = 0;
 	if(check_in_board(px + 1, py + 2)) {
 		fm = store_future_move_knight(px, py, px + 1, py + 2, fm, pp);
@@ -221,6 +228,33 @@ void future_move_knight(int px, int py, int **fm, char ***pp) {
 	}
 	return fm;
 }
-
-void future_move_pawn() {
+int **store_future_move_pawn(int px, int py, int i, int j, int **fm, char ***pp) {
+	int k = fm[3][0];
+	if(py == j) {
+		if(pp[i][j][0] == '\0') {
+			fm[k][0] = i;
+			fm[k][1] = j;
+			(fm[3][0])++;
+		}
+	}
+	else {
+		if(pp[px][py][0] != pp[i][j][0]) {
+			fm[k][0] = i;
+			fm[k][1] = j;
+			(fm[3][0])++;
+		}
+	}
+	return fm;
+}
+int **future_move_pawn(int px, int py, int **fm, char ***pp) {
+	fm[3][0] = 0;
+	if(check_in_board(px + 1, py + 1)) {
+		fm = store_future_move_pawn(px, py, px + 1, py + 1, fm, pp);
+	}
+	if(check_in_board(px + 1, py)) {
+		fm = store_future_move_pawn(px, py, px + 1, py, fm, pp);
+	}
+	if(check_in_board(px + 1, py - 1)) {
+		fm = store_future_move_pawn(px, py, px + 1, py - 1, fm, pp);
+	}
 }
