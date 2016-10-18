@@ -1,22 +1,8 @@
 #include <stdio.h>
 #include "chess_declaration.h"
+#include "functions_chess.h"
 #include <string.h>
 #include <stdlib.h>
-king wk, bk;
-queen wq, bq;
-bishop wb1, wb2, bb1, bb2;
-knight wn1, wn2, bn1, bn2;
-rook wr1, wr2, br1, br2;
-pawn wp1, wp2, wp3, wp4, wp5, wp6, wp7, wp8;
-pawn bp1, bp2, bp3, bp4, bp5, bp6, bp7, bp8;
-
-int check_in_board(int i, int j) {				//Checking if (i, j) is a valid position or not
-	if(i > 7 || i < 0 || j < 0 || j > 7)
-		return 0;
-	else
-		return 1;
-}
-
 void initpos() {				//Position at the start.
 	int i;
 	int j;
@@ -47,45 +33,75 @@ void initpos() {				//Position at the start.
 	strcpy(pp[1][7], "wp8"); strcpy(pp[6][7], "bp8");
 }
 
-void init_fm_king(int **fm) {
+void init_chess_piece() {
+	int i;
+	for(i = 0; i < 32; i++) {
+		chess_piece[i] = (char *)malloc(3);
+	}
+	strcpy(chess_piece[0], "r1");	strcpy(chess_piece[16], "r1");
+	strcpy(chess_piece[1], "n1");	strcpy(chess_piece[17], "n1");
+	strcpy(chess_piece[2], "b1");	strcpy(chess_piece[18], "b1");
+	strcpy(chess_piece[3], "k");	strcpy(chess_piece[19], "k");
+	strcpy(chess_piece[4], "q");	strcpy(chess_piece[20], "q");
+	strcpy(chess_piece[5], "b2");	strcpy(chess_piece[21], "b2");
+	strcpy(chess_piece[6], "n2");	strcpy(chess_piece[22], "n2");
+	strcpy(chess_piece[7], "r2");	strcpy(chess_piece[23], "r2");
+
+	strcpy(chess_piece[8], "p1");	strcpy(chess_piece[24], "p1");
+	strcpy(chess_piece[9], "p2");	strcpy(chess_piece[25], "p2");
+	strcpy(chess_piece[10], "p3");	strcpy(chess_piece[26], "p3");
+	strcpy(chess_piece[11], "p4");	strcpy(chess_piece[27], "p4");
+	strcpy(chess_piece[12], "p5");	strcpy(chess_piece[28], "p5");
+	strcpy(chess_piece[13], "p6");	strcpy(chess_piece[29], "p6");
+	strcpy(chess_piece[14], "p7");	strcpy(chess_piece[30], "p7");
+	strcpy(chess_piece[15], "p8");	strcpy(chess_piece[31], "p8");
+}
+
+void init_fm_king(int fm[][2]) {
 	int i;
 	for(i = 0; i < 11; i++) {
 		fm[i][0] = -1;					//Initialising all the future moves.
+		fm[i][1] = -1;
 	}
 }
 
-void init_fm_queen(int **fm) {
+void init_fm_queen(int fm[][2]) {
 	int i;
 	for(i = 0;i < 28;i++) {
 		fm[i][0] = -1;
+		fm[i][1] = -1;
 	}
 }
 
-void init_fm_bishop(int **fm) {
+void init_fm_bishop(int fm[][2]) {
 	int i;
 	for(i = 0;i < 14;i++) {
 		fm[i][0] = -1;
+		fm[i][1] = -1;
 	}
 }
 
-void init_fm_rook(int **fm) {
+void init_fm_rook(int fm[][2]) {
 	int i;
 	for(i = 0;i < 15;i++) {
 		fm[i][0] = -1;
+		fm[i][1] = -1;
 	}
 }
 
-void init_fm_knight(int **fm) {
+void init_fm_knight(int fm[][2]) {
 	int i;
 	for(i = 0;i < 9;i++) {
 		fm[i][0] = -1;
+		fm[i][1] = -1;
 	}
 }
 
-void init_fm_pawn(int **fm) {
+void init_fm_pawn(int fm[][2]) {
 	int i;
-	for(i = 0; i < 4;i++) {
+	for(i = 0; i < 5;i++) {
 		fm[i][0] = -1;
+		fm[i][1] = -1;
 	}
 }
 
@@ -100,67 +116,28 @@ void initpiece() {							//Initializing all the attributes of the pieces.
 	wn2.col = 1;	wp4.col = 1;	bp6.col = 0;
 	bn1.col = 0;	wp5.col = 1;	bp7.col = 0;
 	bn2.col = 0;	wp6.col = 1;	bp8.col = 0;
-	int i;
-	for(i = 0;i < 11;i++) {						//Allocating memory for future moves.
-		wk.fm[i] = (int *)malloc(sizeof(int) * 2);		//One move contains 2 cordinates
-		bk.fm[i] = (int *)malloc(sizeof(int) * 2);
-	}
+
 	init_fm_king(wk.fm);
 	init_fm_king(bk.fm);
-	for(i = 0;i < 28;i++) {
-		wq.fm[i] = (int *)malloc(sizeof(int) * 2);
-		bq.fm[i] = (int *)malloc(sizeof(int) * 2);
-	}
+
 	init_fm_queen(wq.fm);
 	init_fm_queen(bq.fm);
-	for(i = 0;i < 14;i++) {
-		wb1.fm[i] = (int *)malloc(sizeof(int) * 2);
-		wb2.fm[i] = (int *)malloc(sizeof(int) * 2);
-		bb1.fm[i] = (int *)malloc(sizeof(int) * 2);
-		bb2.fm[i] = (int *)malloc(sizeof(int) * 2);
-	}
+
 	init_fm_bishop(wb1.fm);
 	init_fm_bishop(wb2.fm);
 	init_fm_bishop(bb1.fm);
 	init_fm_bishop(bb2.fm);
-	for(i = 0;i < 15;i++) {
-		wr1.fm[i] = (int *)malloc(sizeof(int) * 2);
-		wr2.fm[i] = (int *)malloc(sizeof(int) * 2);
-		br1.fm[i] = (int *)malloc(sizeof(int) * 2);
-		br2.fm[i] = (int *)malloc(sizeof(int) * 2);
-	}
+
 	init_fm_rook(wr1.fm);
 	init_fm_rook(wr2.fm);
 	init_fm_rook(br1.fm);
 	init_fm_rook(br2.fm);
-	for(i = 0;i < 9;i++) {
-		wn1.fm[i] = (int *)malloc(sizeof(int) * 2);
-		wn2.fm[i] = (int *)malloc(sizeof(int) * 2);
-		bn1.fm[i] = (int *)malloc(sizeof(int) * 2);
-		bn2.fm[i] = (int *)malloc(sizeof(int) * 2);
-	}
+
 	init_fm_knight(wn1.fm);
 	init_fm_knight(wn2.fm);
 	init_fm_knight(bn1.fm);
 	init_fm_knight(bn2.fm);
-	for(i = 0;i < 4;i++) {
-		wp1.fm[i] = (int *)malloc(sizeof(int) * 2);	
-		wp2.fm[i] = (int *)malloc(sizeof(int) * 2);
-		wp3.fm[i] = (int *)malloc(sizeof(int) * 2);
-		wp4.fm[i] = (int *)malloc(sizeof(int) * 2);
-		wp5.fm[i] = (int *)malloc(sizeof(int) * 2);
-		wp6.fm[i] = (int *)malloc(sizeof(int) * 2);
-		wp7.fm[i] = (int *)malloc(sizeof(int) * 2);
-		wp8.fm[i] = (int *)malloc(sizeof(int) * 2);
-		bp1.fm[i] = (int *)malloc(sizeof(int) * 2);
-		bp2.fm[i] = (int *)malloc(sizeof(int) * 2);
-		bp3.fm[i] = (int *)malloc(sizeof(int) * 2);
-		bp4.fm[i] = (int *)malloc(sizeof(int) * 2);
-		bp5.fm[i] = (int *)malloc(sizeof(int) * 2);
-		bp6.fm[i] = (int *)malloc(sizeof(int) * 2);
-		bp7.fm[i] = (int *)malloc(sizeof(int) * 2);
-		bp8.fm[i] = (int *)malloc(sizeof(int) * 2);
-	}
+
 	init_fm_pawn(wp1.fm);
 	init_fm_pawn(wp2.fm);
 	init_fm_pawn(wp3.fm);
@@ -169,6 +146,7 @@ void initpiece() {							//Initializing all the attributes of the pieces.
 	init_fm_pawn(wp6.fm);
 	init_fm_pawn(wp7.fm);
 	init_fm_pawn(wp8.fm);
+
 	init_fm_pawn(bp1.fm);
 	init_fm_pawn(bp2.fm);
 	init_fm_pawn(bp3.fm);
