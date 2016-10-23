@@ -354,11 +354,6 @@ void check_before_turn(input *ip, char ***pp, int if_check_before_turn) {
 					iflag = check_chess_piece(0, temp_killed_piece);
 				else
 					iflag = check_chess_piece(1, temp_killed_piece);
-				if(iflag == -1) {
-					printw("Killed piece is %s", temp_killed_piece);
-					refresh();
-					getch();
-				}
 				chess_piece[iflag][0] = '\0';
 			}
 			else {

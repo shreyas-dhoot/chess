@@ -119,9 +119,9 @@ int main() {
 			ip -> player = 0;
 		else
 			ip -> player = 1;
-		ifcheck = check(ip, pp);
-		move(5,1);
+		move(0,1);
 		clrtoeol();
+		ifcheck = check(ip, pp);
 		if(ifcheck) {
 			if(ip -> player == 1)
 				printw("Black Check");
