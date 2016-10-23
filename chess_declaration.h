@@ -2,7 +2,7 @@
 #define __DECLERATION_H
 typedef struct king {
 	int col;		//color 1 for white 0 for black
-	int fm[11][2];		//Future moves
+	int fm[12][2];		//Future moves
 	int cp[2];		//Current position
 }king;
 typedef struct queen {
@@ -29,7 +29,7 @@ typedef struct knight {
 typedef struct pawn {
 	int col;
 	int cp[2];		//Current position
-	int fm[4][2];
+	int fm[5][2];
 }pawn;
 typedef struct input {
 	int player;
@@ -38,7 +38,7 @@ typedef struct input {
 	int px;
 	int py;
 	int enum_piece;
-	int **fm;
+	int (*fm)[2];
 }input;
 char ***pp;
 char *chess_piece[32];

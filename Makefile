@@ -1,5 +1,5 @@
 chess: initialisechesspiece.o chessboard.o check_things.o future_moves.o
-	gcc initialisechesspiece.o chessboard.o check_things.o future_moves.o -o chess -lncurses
+	gcc initialisechesspiece.o chessboard.o check_things.o future_moves.o -o chess -lncurses -lpanel
 initialisechesspiece.o: initialisechesspiece.c
 	gcc -c initialisechesspiece.c -g -Wall
 chessboard.o: chessboard.c chess_declaration.h initialise.h functions_chess.h
