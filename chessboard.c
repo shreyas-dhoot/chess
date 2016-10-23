@@ -23,7 +23,7 @@ int main() {
 	ip = (input *)malloc(sizeof(input));
 	WINDOW **window[8];
 	WINDOW *win, *win1, *win_input;
-	int startx, starty, i, j, s, col, inputstart_x = 0, inputstart_y = 0;
+	int startx, starty, i, j, s, col, inputstart_x = 0, inputstart_y = 0, ifcheck;
 	for(i = 0; i < 8; i++) {
 		window[i] = (WINDOW **)malloc(sizeof(WINDOW *) * 8);
 	}
@@ -92,6 +92,7 @@ int main() {
 	ip -> player = 1;
 	while(1) {
 		//Before taking input check for resizing of the window.
+	//	print_chess_piece();
 		ip = input_piece(win_input, inputstart_y, inputstart_x, ip);
 		
 		highlight_moves(ip, window, panel);
@@ -118,6 +119,16 @@ int main() {
 			ip -> player = 0;
 		else
 			ip -> player = 1;
+		ifcheck = check(ip, pp);
+		move(5,1);
+		clrtoeol();
+		if(ifcheck) {
+			if(ip -> player == 1)
+				printw("Black Check");
+			else
+				printw("white Check");
+		}
+		refresh();
 	}
 	mvgetch(LINES/2, COLS/2);
 //	refresh();
@@ -359,9 +370,6 @@ void unhighlight_moves(input *ip, WINDOW ***win, PANEL *high_panel[67]) {
 WINDOW *create_newwin(int height, int width, int starty, int startx, int col, int j, int k) {//j represents row no.
 	WINDOW *local_win;
 	local_win = newwin(width , (2 *  width) , starty, startx);
-	int x1, y1, x2, y2;
-	getbegyx(local_win, y1, x1);
-	getmaxyx(local_win, y2, x2);
 //	usleep(2000000);
 	if(col == 0) {
 		wbkgd(local_win, COLOR_PAIR(1));

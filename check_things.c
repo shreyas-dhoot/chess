@@ -11,6 +11,22 @@ int check_in_board(int i, int j) {				//Checking if (i, j) is a valid position o
 		return 1;
 }
 
+void print_chess_piece() {
+	int i;
+	move(3,0);
+	clrtoeol();
+	move(4,0);
+	clrtoeol();
+	move(5,0);
+	clrtoeol();
+	move(3,0);
+	for(i = 0 ; i < 32; i++) {
+		printw("(%d : %s) ", i, chess_piece[i]);
+	}
+	getch();
+	refresh();
+}
+
 int check_chess_piece(int player, char *piece) {
 	int i;
 	if(player == 1) {
@@ -140,18 +156,15 @@ int initialise_future_move(input *ip) {
 	x = (ip -> move[0]) - '0';
 	y = (ip -> move[1]) - '0';
 	switch(ip -> enum_piece) {
-		case 0:  wr1.cp[0] = x;
-			 wr1.cp[1] = y;
+		case 0:  
 			 ip -> fm = wr1.fm;
 			 init_fm_king(wr1.fm);
 				break;
-		case 1:  wn1.cp[0] = x;
-			 wn1.cp[1] = y;
+		case 1:  
 			 ip -> fm = wn1.fm;
 			 init_fm_knight(wn1.fm);
 				break;
-		case 2:  wb1.cp[0] = x;
-			 wb1.cp[1] = y;
+		case 2:  
 			 ip -> fm = wb1.fm;
 			 init_fm_bishop(wb1.fm);
 				break;
@@ -160,143 +173,116 @@ int initialise_future_move(input *ip) {
 			 ip -> fm = wk.fm;
 			 init_fm_king(wk.fm);
 				break;
-		case 4:  wq.cp[0] = x;
-			 wq.cp[1] = y;
+		case 4:  
 			 ip -> fm = wq.fm;
 			 init_fm_queen(wq.fm);
 				break;
-		case 5:  wb2.cp[0] = x;
-			 wb2.cp[1] = y;
+		case 5:  
 			 ip -> fm = wb2.fm;
 			 init_fm_bishop(wb2.fm);
 				break;
-		case 6:  wn2.cp[0] = x;
-			 wn2.cp[1] = y;
+		case 6:  
 			 ip -> fm = wn2.fm;
 			 init_fm_knight(wn2.fm);
 				break;
-		case 7:  wr2.cp[0] = x;
-			 wr2.cp[1] = y;
+		case 7: 
 			 ip -> fm = wr2.fm;
 			 init_fm_rook(wr2.fm);
 				break;
-		case 8:  wp1.cp[0] = x;
-			 wp1.cp[1] = y;
+		case 8:  
 			 ip -> fm = wp1.fm;
 			 init_fm_pawn(wp1.fm);
 				break;
-		case 9:  wp2.cp[0] = x;
-			 wp2.cp[1] = y;
+		case 9:  
 			 ip -> fm = wp2.fm;
 			 init_fm_pawn(wp2.fm);
 				break;
-		case 10: wp3.cp[0] = x;
-			 wp3.cp[1] = y; 
+		case 10:  
 			 ip -> fm = wp3.fm;
 			 init_fm_pawn(wp3.fm);
 				break;
-		case 11: wp4.cp[0] = x;
-			 wp4.cp[1] = y;
+		case 11: 
 			 ip -> fm = wp4.fm;
 			 init_fm_pawn(wp4.fm);
 				break;
-		case 12: wp5.cp[0] = x;
-			 wp5.cp[1] = y;
+		case 12: 
 			 ip -> fm = wp5.fm;
 			 init_fm_pawn(wp5.fm);
 				break;
-		case 13: wp6.cp[0] = x;
-			 wp6.cp[1] = y;
+		case 13: 
 			 ip -> fm = wp6.fm;
 			 init_fm_pawn(wp6.fm);
 				break;
-		case 14: wp7.cp[0] = x;
-			 wp7.cp[1] = y; 
+		case 14:  
 			 ip -> fm = wp7.fm;
 			 init_fm_pawn(wp7.fm);
 				break;
-		case 15: wp8.cp[0] = x;
-			 wp8.cp[1] = y;
+		case 15: 
 			 ip -> fm = wp8.fm;
 			 init_fm_pawn(wp8.fm);
 				break;
-		case 16: br1.cp[0] = x;
-			 br1.cp[1] = y;
+		case 16: 
 			 ip -> fm = br1.fm;
 			 init_fm_rook(br1.fm);
 				break;
-		case 17: bn1.cp[0] = x;
-			 bn1.cp[1] = y;
+		case 17: 
 			 ip -> fm = bn1.fm;
 			 init_fm_knight(bn1.fm);
 				break;
-		case 18: bb1.cp[0] = x;
-			 bb1.cp[1] = y;
+		case 18: 
 			 ip -> fm = bb1.fm;
 			 init_fm_bishop(bb1.fm);
 				break;
 		case 19: bk.cp[0] = x;
-			 bk.cp[1] = y; 
+			 bk.cp[1] = y;
 			 ip -> fm = bk.fm;
 			 init_fm_king(bk.fm);
 				break;
-		case 20: bq.cp[0] = x;
-			 bq.cp[1] = y;
+		case 20: 
 			 ip -> fm = bq.fm;
 			 init_fm_queen(bq.fm);
 				break;
-		case 21: bb2.cp[0] = x;
-			 bb2.cp[1] = y;
+		case 21: 
 			 ip -> fm = bb2.fm;
 			 init_fm_bishop(bb2.fm);
 				break;
-		case 22: bn2.cp[0] = x;
-			 bn2.cp[1] = y;
+		case 22: 
 			 ip -> fm = bn2.fm;
 			 init_fm_knight(bn2.fm);
 				break;
-		case 23: br2.cp[0] = x;
-			 br2.cp[1] = y;
+		case 23: 
 			 ip -> fm = br2.fm;
 			 init_fm_rook(br2.fm);
 				break;
-		case 24: bp1.cp[0] = x;
-			 bp1.cp[1] = y;
+		case 24: 
 			 ip -> fm = bp1.fm;
 			 init_fm_pawn(bp1.fm);
 				break;
-		case 25: bp2.cp[0] = x;
-			 bp2.cp[1] = y;
+		case 25: 
 			 ip -> fm = bp2.fm;
 			 init_fm_pawn(bp2.fm);
 				break;
-		case 26: bp3.cp[0] = x;
-			 bp3.cp[1] = y;
+		case 26: 
 			 ip -> fm = bp3.fm;
 			 init_fm_pawn(bp3.fm);
 				break;
-		case 27: bp4.cp[0] = x;
-			 bp4.cp[1] = y;
+		case 27: 
 			 ip -> fm = bp4.fm;
 			 init_fm_pawn(bp4.fm);
 				break;
-		case 28: bp5.cp[0] = x;
-			 bp5.cp[1] = y;
+		case 28: 
 			 ip -> fm = bp5.fm;
 			 init_fm_pawn(bp5.fm);
 				break;
-		case 29: bp6.cp[0] = x;
-			 bp6.cp[1] = y;
+		case 29: 
 			 ip -> fm = bp6.fm;
 			 init_fm_pawn(bp6.fm);
 				break;
-		case 30: bp7.cp[0] = x;
-			 bp7.cp[1] = y;
+		case 30: 
 			 ip -> fm = bp7.fm;
 			 init_fm_pawn(bp7.fm);
 				break;
-		case 31: bp8.cp[0] = x;
-			 bp8.cp[1] = y;
+		case 31: 
 			 ip -> fm = bp8.fm;
 			 init_fm_pawn(bp8.fm);
 				break;

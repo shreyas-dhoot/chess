@@ -47,13 +47,14 @@ void future_move_king(int px, int py, int fm[][2], char ***pp) {			//Input prese
 }
 
 void future_move_queen(int px, int py, int fm[][2], char ***pp) {
-	int i, j, k = 0;				//Have to return k too.
+	int k = 0;				//Have to return k too.
 	future_move_rook(px, py, fm, pp);
 	k = fm[14][0];
 	fm[14][0] = -1;
 	future_move_bishop(px, py, fm, pp, k, 0);
 	move(0,0);
-/*	clrtoeol();
+/*	int i, j;
+	clrtoeol();
 	for(i = 0; i < 27; i++)
 		printw("(%d, %d), ", fm[i][0], fm[i][1]);
 	refresh();*/
@@ -294,10 +295,10 @@ void future_move_pawn(int px, int py, int fm[][2], char ***pp, int player) {
 		if(check_in_board(px - 1, py - 1)) {
 			store_future_move_pawn(px, py, px - 1, py - 1, fm, pp);
 		}
-		if(check_in_board(px + 1, py)) {
+		if(check_in_board(px - 1, py)) {
 			store_future_move_pawn(px, py, px - 1, py, fm, pp);
 		}
-		if(check_in_board(px + 1, py - 1)) {
+		if(check_in_board(px - 1, py + 1)) {
 			store_future_move_pawn(px, py, px - 1, py + 1, fm, pp);
 		}
 		if(px == 6) {
@@ -343,7 +344,7 @@ void check_before_turn(input *ip, char ***pp, int if_check_before_turn) {
 				strcpy(temp_killed_piece, pp[ip -> fm[ifm][0]][ip -> fm[ifm][1]]);
 				strcpy(pp[ip -> fm[ifm][0]][ip -> fm[ifm][1]],ip -> piece);
 				temp_killed_piece[0] = temp_killed_piece[1];
-				if(temp_piece[2] == '\0')
+				if(temp_killed_piece[2] == '\0')
 					temp_killed_piece[1] = '\0';
 				else{
 					temp_killed_piece[1] = temp_killed_piece[2];
@@ -353,16 +354,17 @@ void check_before_turn(input *ip, char ***pp, int if_check_before_turn) {
 					iflag = check_chess_piece(0, temp_killed_piece);
 				else
 					iflag = check_chess_piece(1, temp_killed_piece);
+				if(iflag == -1) {
+					printw("Killed piece is %s", temp_killed_piece);
+					refresh();
+					getch();
+				}
 				chess_piece[iflag][0] = '\0';
 			}
 			else {
 				strcpy(pp[ip -> fm[ifm][0]][ip -> fm[ifm][1]],ip -> piece);
 			}
-			int flag;
 			if(ip -> piece[1] == 'k') {
-				printw("ip -> piece is %s.", ip -> piece);
-				refresh();
-				getch();
 				kx = temp_fmx;
 				ky = temp_fmy;
 			}
@@ -596,12 +598,6 @@ void check_before_turn(input *ip, char ***pp, int if_check_before_turn) {
 				if(pp[i][j][0] != '\0') {
 					if((ip -> player == 1 && pp[i][j][0] == 'w') || (ip -> player == 0 && pp[i][j][0] == 'b'))
 						break;
-					printw("Future move when piece encountered: (%d, %d) ", temp_fmx, temp_fmy);
-					printw(" Piece at (%d, %d) is %s", ip -> px, ip -> py, pp[ip -> px][ip -> px]);
-					printw(" Virtually piece at (%d, %d) is %s.", temp_fmx, temp_fmy, pp[temp_fmx][temp_fmy]);
-					printw(" i and j is %d and %d. ", i, j);
-					getch();
-					refresh();
 					temp_piece[0] = pp[i][j][1];
 					if(pp[i][j][2] != '\0') {
 						temp_piece[1] = pp[i][j][2];
@@ -609,14 +605,10 @@ void check_before_turn(input *ip, char ***pp, int if_check_before_turn) {
 					}
 					else
 						temp_piece[1] = '\0';
-					printw("\nEncountered piece is %s.", temp_piece);
 					if(ip -> player == 1)
 						enum_piece = check_chess_piece(0, temp_piece);
 					else
 						enum_piece = check_chess_piece(1, temp_piece);
-					printw("\nEnum of encountered piece is %d.", enum_piece);
-					refresh();
-					getch();
 					if(enum_piece == 16 || enum_piece == 20 || enum_piece == 23 || enum_piece == 0 || enum_piece == 4 || enum_piece == 7) {
 						ip -> fm[ifm][0] = -2;
 						ip -> fm[ifm][1] = -2;

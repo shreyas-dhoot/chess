@@ -107,35 +107,9 @@ void init_fm_pawn(int fm[][2]) {
 
 void initpiece() {	
 							//Initializing all the attributes of the pieces.
-	wk.col = 1;	wr1.col = 1;	wp7.col = 1;			//Initializing color
-	bk.col = 0;	wr2.col = 1;	wp8.col = 1;
-	wb1.col = 1;	br1.col = 0;	bp1.col = 0;
-	wb2.col = 1;	br2.col = 0;	bp2.col = 0;
-	bb1.col = 0;	wp1.col = 1;	bp3.col = 0;
-	bb2.col = 0;	wp2.col = 1;	bp4.col = 0;
-	wn1.col = 1;	wp3.col = 1;	bp5.col = 0;
-	wn2.col = 1;	wp4.col = 1;	bp6.col = 0;
-	bn1.col = 0;	wp5.col = 1;	bp7.col = 0;
-	bn2.col = 0;	wp6.col = 1;	bp8.col = 0;
-
-	wr1.cp[0] = 0;	wp1.cp[0] = 1;  br1.cp[0] = 7;  bp1.cp[0] = 6;
-	wr1.cp[1] = 0;  wp1.cp[1] = 0;  br1.cp[1] = 0;  bp1.cp[1] = 0;
-	wn1.cp[0] = 0;  wp2.cp[0] = 1;  bn1.cp[0] = 7;  bp2.cp[0] = 6;
-	wn1.cp[1] = 1;  wp2.cp[1] = 1;  bn1.cp[1] = 1;  bp2.cp[1] = 1;
-	wb1.cp[0] = 0;  wp3.cp[0] = 1;  bb1.cp[0] = 7;  bp3.cp[0] = 6;
-	wb1.cp[1] = 2;  wp3.cp[1] = 2;  bb1.cp[1] = 2;  bp3.cp[1] = 2;
-	wk.cp[0] = 0;   wp4.cp[0] = 1;  bk.cp[0] = 7;   bp4.cp[0] = 6;
-	wk.cp[1] = 3;   wp4.cp[1] = 3;  bk.cp[1] = 3;   bp4.cp[1] = 3;
-	wq.cp[0] = 0;   wp5.cp[0] = 1;  bq.cp[0] = 7;   bp5.cp[0] = 6;
-	wq.cp[1] = 4;   wp5.cp[1] = 4;  bq.cp[1] = 4;   bp5.cp[1] = 4;
-	wb2.cp[0] = 0;  wp6.cp[0] = 1;  bb2.cp[0] = 7;  bp6.cp[0] = 6;
-	wb2.cp[1] = 5;  wp6.cp[1] = 5;  bb2.cp[1] = 5;  bp6.cp[1] = 5;
-	wn2.cp[0] = 0;  wp7.cp[0] = 1;  bn2.cp[0] = 7;  bp7.cp[0] = 6;
-	wn2.cp[1] = 6;  wp7.cp[1] = 6;  bn2.cp[1] = 6;  bp7.cp[1] = 6;
-	wr2.cp[0] = 0;  wp8.cp[0] = 1;  br2.cp[0] = 7;  bp8.cp[0] = 6;
-	wr2.cp[1] = 7;  wp8.cp[1] = 7;  br2.cp[1] = 7;  bp8.cp[1] = 7;
-
-
+	wk.cp[0] = 0; bk.cp[0] = 7;
+	wk.cp[1] = 3; bk.cp[1] = 3;
+	
 	init_fm_king(wk.fm);
 	init_fm_king(bk.fm);
 

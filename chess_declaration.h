@@ -1,34 +1,23 @@
 #ifndef __DECLERATION__H
 #define __DECLERATION_H
 typedef struct king {
-	int col;		//color 1 for white 0 for black
 	int fm[12][2];		//Future moves
 	int cp[2];		//Current position
 }king;
 typedef struct queen {
-	int col;
 	int fm[28][2];
-	int cp[2];		//Current position
 }queen;
 
 typedef struct bishop {
-	int col;
-	int cp[2];		//Current position
 	int fm[14][2];
 }bishop;
 typedef struct rook {
-	int col;
-	int cp[2];		//Current position
 	int fm[15][2];
 }rook;
 typedef struct knight {
-	int col;
-	int cp[2];		//Current position
 	int fm[9][2];
 }knight;
 typedef struct pawn {
-	int col;
-	int cp[2];		//Current position
 	int fm[5][2];
 }pawn;
 typedef struct input {
