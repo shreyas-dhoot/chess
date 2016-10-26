@@ -38,12 +38,6 @@ void future_move_king(int px, int py, int fm[][2], char ***pp) {			//Input prese
 	if(check_in_board(px + 1, py - 1)) {
 		store_future_move_king(px, py, px + 1, py - 1, fm, pp);
 	}
-/*	int i;
-	move(0,0);
-	clrtoeol();
-	for(i = 0; i < 12; i++)
-			printw("(%d, %d), ", fm[i][0], fm[i][1]);
-	refresh();*/
 }
 
 void future_move_queen(int px, int py, int fm[][2], char ***pp) {
@@ -53,11 +47,6 @@ void future_move_queen(int px, int py, int fm[][2], char ***pp) {
 	fm[14][0] = -1;
 	future_move_bishop(px, py, fm, pp, k, 0);
 	move(0,0);
-/*	int i, j;
-	clrtoeol();
-	for(i = 0; i < 27; i++)
-		printw("(%d, %d), ", fm[i][0], fm[i][1]);
-	refresh();*/
 }
 
 void future_move_rook(int px, int py, int fm[][2], char ***pp) {
@@ -125,11 +114,6 @@ void future_move_rook(int px, int py, int fm[][2], char ***pp) {
 		}
 	}
 	fm[14][0] = k;
-/*	move(0,0);
-	clrtoeol();
-	for(i = 0; i < 15; i++)
-		printw("(%d, %d), ", fm[i][0], fm[i][1]);
-	refresh();*/
 }
 
 void future_move_bishop(int px, int py, int fm[][2], char ***pp, int k, int isbishop) {		//Storing all the future moves of bishop in fm
@@ -200,11 +184,6 @@ void future_move_bishop(int px, int py, int fm[][2], char ***pp, int k, int isbi
 	}
 	if(isbishop){
 		fm[13][0] = k;
-/*		move(0,0);
-		clrtoeol();
-		for(i = 0; i < 14; i++)
-			printw("(%d, %d), ", fm[i][0], fm[i][1]);
-		refresh();*/
 	}
 	else
 		fm[26][0] = k;
@@ -245,12 +224,6 @@ void future_move_knight(int px, int py, int fm[][2], char ***pp) {
 		store_future_move_knight(px, py, px - 1, py + 2, fm, pp);
 	}
 	
-/*	int i;
-	move(0,0);
-	clrtoeol();
-	for(i = 0; i < 9; i++)
-		printw("(%d, %d), ", fm[i][0], fm[i][1]);
-	refresh();*/
 }
 void store_future_move_pawn(int px, int py, int i, int j, int fm[][2], char ***pp) {
 	int k = fm[4][0];
@@ -310,12 +283,6 @@ void future_move_pawn(int px, int py, int fm[][2], char ***pp, int player) {
 			}
 		}
 	}
-/*	move(0,0);
-	clrtoeol();
-	int i;
-	for(i = 0; i < 5; i++)
-		printw("(%d, %d), ", fm[i][0], fm[i][1]);
-	refresh();*/
 }
 
 int check_ifknight(int i, int j,int ifm, input *ip, char ***pp) {
@@ -354,6 +321,11 @@ void check_before_turn(input *ip, char ***pp, int if_check_before_turn) {
 					iflag = check_chess_piece(0, temp_killed_piece);
 				else
 					iflag = check_chess_piece(1, temp_killed_piece);
+				if(iflag == -1) {
+					printw("Killed piece is %s", temp_killed_piece);
+					refresh();
+					getch();
+				}
 				chess_piece[iflag][0] = '\0';
 			}
 			else {
@@ -488,10 +460,6 @@ void check_before_turn(input *ip, char ***pp, int if_check_before_turn) {
 			}
 
 			for(i = kx + 1, j = ky + 1; i < 8 && j < 8; i++, j++) {
-			/*	printw("\nPlayer %d", ip -> player);
-				printw("\nPiece at (%d, %d) is %s.", i, j, pp[i][j]);
-				refresh();
-				getch();*/
 				if(pp[i][j][0] != '\0') {
 					if((ip -> player == 1 && pp[i][j][0] == 'w') || (ip -> player == 0 && pp[i][j][0] == 'b'))
 						break;
@@ -623,10 +591,6 @@ void check_before_turn(input *ip, char ***pp, int if_check_before_turn) {
 				strcat(a, temp_killed_piece);
 				pp[temp_fmx][temp_fmy][0] =  '\0';
 				strcat(pp[temp_fmx][temp_fmy], a);
-			/*	printw("a is %s", a);
-				printw("\ntemp_killed_piece is %s ", temp_killed_piece);
-				refresh();
-				getch();*/
 				strcpy(chess_piece[iflag], temp_killed_piece);
 			}
 			else
@@ -636,12 +600,4 @@ void check_before_turn(input *ip, char ***pp, int if_check_before_turn) {
 		}
 		strcpy(pp[ip -> px][ip -> py], ip -> piece);
 	}
-/*	int ifm = 0;
-	printw("After check ");
-	while(ip -> fm[ifm][1] != -1) {
-		printw("(%d, %d) ", ip -> fm[ifm][0], ip -> fm[ifm][1]);
-		ifm++;
-	}
-	refresh();*/
 }
-

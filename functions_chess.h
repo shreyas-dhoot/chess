@@ -19,6 +19,8 @@ int check_chess_piece(int , char *);
 int generate_future_move(input *);
 int check_chess_move(input *);
 int initialise_future_move(input *);
-int check_chess_ifmove(input *ip);
+int check_chess_ifmove(input *);
+int isempty(int [][2], int );
+int checkmate(int , input *);
 void print_chess_piece();
 #endif

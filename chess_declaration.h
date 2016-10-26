@@ -6,19 +6,24 @@ typedef struct king {
 }king;
 typedef struct queen {
 	int fm[28][2];
+	int cp[2];		//Current position
 }queen;
 
 typedef struct bishop {
 	int fm[14][2];
+	int cp[2];		//Current position
 }bishop;
 typedef struct rook {
 	int fm[15][2];
+	int cp[2];		//Current position
 }rook;
 typedef struct knight {
 	int fm[9][2];
+	int cp[2];		//Current position
 }knight;
 typedef struct pawn {
 	int fm[5][2];
+	int cp[2];		//Current position
 }pawn;
 typedef struct input {
 	int player;

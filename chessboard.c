@@ -14,16 +14,23 @@ input *find_present_cordinates(input *);
 void highlight_moves(input *, WINDOW ***, PANEL *[]);
 void unhighlight_moves(input *, WINDOW ***, PANEL *[]);
 void move_piece(input *, WINDOW ***, int, PANEL *[]);
+input *second_type_input(input *, WINDOW ***, PANEL **, WINDOW *);
+void highlight_window(WINDOW ***, PANEL **, int, int, int, input *);
+input *second_type_input_move(input *, WINDOW ***, PANEL **, WINDOW *);
 int main() {
 //	char ***pp;
 	initpos();				//initialise starting position
 	init_chess_piece();
 	initpiece();				//Initializing all the attributes of the pieces.
 	input *ip;
+	int a[1][2];
+	a[0][0] = -1;
+	a[0][1] = -1;
 	ip = (input *)malloc(sizeof(input));
+	ip -> fm = a;
 	WINDOW **window[8];
 	WINDOW *win, *win1, *win_input;
-	int startx, starty, i, j, s, col, inputstart_x = 0, inputstart_y = 0, ifcheck;
+	int startx, starty, i, j, s, col, inputstart_x = 0, inputstart_y = 0, ifcheck, ifcheckmate;
 	for(i = 0; i < 8; i++) {
 		window[i] = (WINDOW **)malloc(sizeof(WINDOW *) * 8);
 	}
@@ -35,7 +42,7 @@ int main() {
 	init_pair(1, COLOR_BLACK, COLOR_WHITE);
 	init_pair(2, COLOR_WHITE, COLOR_BLACK);
 	cbreak();
-//	noecho();
+	noecho();
 	keypad(stdscr, TRUE);
 	wbkgd(stdscr, COLOR_PAIR(1));
 	refresh();
@@ -93,7 +100,8 @@ int main() {
 	while(1) {
 		//Before taking input check for resizing of the window.
 	//	print_chess_piece();
-		ip = input_piece(win_input, inputstart_y, inputstart_x, ip);
+		ip = second_type_input(ip, window, panel, win_input);
+//		ip = input_piece(win_input, inputstart_y, inputstart_x, ip);
 		
 		highlight_moves(ip, window, panel);
 		i = 0;
@@ -109,7 +117,8 @@ int main() {
 			i++;
 		}
 		refresh();
-		input_move(win_input, ip);
+		second_type_input_move(ip, window, panel, win_input);
+//		input_move(win_input, ip);
 		unhighlight_moves(ip, window, panel);
 		move_piece(ip, window, s, panel);
 		i = initialise_future_move(ip);
@@ -119,25 +128,305 @@ int main() {
 			ip -> player = 0;
 		else
 			ip -> player = 1;
-		move(0,1);
-		clrtoeol();
 		ifcheck = check(ip, pp);
+		ifcheckmate = checkmate(ifcheck, ip);
+		if(ifcheckmate == 1 && ip -> player == 1) {
+			move(5,1);
+			clrtoeol();
+			printw("White Checkmate \n");
+			printw("Player 2 wins");
+			refresh();
+			break;
+		}
+		else if(ifcheckmate == 1 && ip -> player == 0) {
+			move(5,1);
+			clrtoeol();
+			printw("Black Checkmate \n");
+			printw("Player 1 wins");
+			refresh();
+			break;
+		}
+		move(5,1);
+		clrtoeol();
 		if(ifcheck) {
 			if(ip -> player == 1)
-				printw("Black Check");
+				printw("White Check");
 			else
-				printw("white Check");
+				printw("Black Check");
 		}
 		refresh();
 	}
-	mvgetch(LINES/2, COLS/2);
 //	refresh();
 	getch();
 	endwin();
 	return 0;
 }
 
-input *input_piece(WINDOW *inputwin, int inputstart_y, int inputstart_x, input *ip) {
+void highlight_window(WINDOW ***win, PANEL **high_panel, int x, int y, int ifhlt, input *ip) {
+	PANEL *top;
+	int k, flag = 1, i = 0;
+	if(ifhlt) {
+		wbkgd(win[x][y], COLOR_PAIR(4));
+	}
+	else {
+		while((ip -> fm)[i][1] != -1) {
+			if(x == ip -> fm[i][0] && y == ip -> fm[i][1]) {
+				flag = 0;
+				break;
+			}
+			i++;
+		}
+		if(flag) {
+			if(((x % 2 == 1) && (y % 2 == 1)) || ((x % 2 == 0) && (y % 2 == 0))) {	//white color
+				wbkgd(win[x][y], COLOR_PAIR(2));
+			}
+			else {									//black color
+				wbkgd(win[x][y], COLOR_PAIR(1));
+			}
+		}
+		else {
+			wbkgd(win[x][y], COLOR_PAIR(3));
+		}
+	}
+	wrefresh(win[x][y]);
+	if(flag) {
+		k = (x * 8) + y + 1;
+		while(k != 67) {
+			top = high_panel[k];
+			top = (PANEL *)panel_userptr(top);
+			top_panel(top);
+			k++;
+		}
+		update_panels();
+		doupdate();
+	}
+}
+
+input *second_type_input(input *ip, WINDOW ***win, PANEL **high_panel, WINDOW *inputwin) {
+	int x = 0, y = 0, i;
+	mvprintw(0, 0, "Use arrow keys to go up and down, Press enter a to select a choice");
+	refresh();
+	init_pair(4, COLOR_RED, COLOR_BLUE);
+	int flag = 0;
+	int inputmax_x, inputmax_y;
+	int c;
+	getmaxyx(inputwin, inputmax_y, inputmax_x);
+	wmove(inputwin, 0 , 0);
+	werase(inputwin);
+	wclrtoeol(inputwin);
+	if(ip -> player == 1) {
+		wbkgd(inputwin, COLOR_PAIR(1));
+		mvwprintw(inputwin, (inputmax_y) / 8, 2,  "White's turn \n ", ip -> player);
+	}
+	else {
+		wbkgd(inputwin, COLOR_PAIR(2));
+		mvwprintw(inputwin, (inputmax_y) / 8, 2, "Black's turn \n ", ip -> player);
+	}
+	wrefresh(inputwin);
+	highlight_window(win, high_panel, x, y, 1, ip);
+	int flag_piece, flag_move;
+	char temp_piece[3];
+	while (1) {
+		c = getch();
+			switch(c) {
+			flag = 0;
+			case KEY_UP:	
+					highlight_window(win, high_panel, x, y, 0, ip);
+					if(x == 0)
+						x = 7;
+					else
+						x--;
+					highlight_window(win, high_panel, x, y, 1, ip);
+				      
+				     	break;
+			case KEY_DOWN:	highlight_window(win, high_panel, x, y, 0, ip);
+					if(x == 7)
+						x = 0;
+					else
+					 	x++;	
+					highlight_window(win, high_panel, x, y, 1, ip);
+					break;
+			case KEY_RIGHT:highlight_window(win, high_panel, x, y, 0, ip);
+					 if(y == 7)
+						y = 0;
+					 else
+					 	y++;
+					highlight_window(win, high_panel, x, y, 1, ip);
+					break;
+			case KEY_LEFT: 	highlight_window(win, high_panel, x, y, 0, ip);
+					if(y == 0)
+						y = 7;
+					else
+						y--;
+					highlight_window(win, high_panel, x, y, 1, ip);
+					break;
+			case 10:strcpy(ip -> piece, pp[x][y]);
+				if((ip -> player == 0 && ip -> piece[0] == 'b') || (ip -> player == 1 && ip -> piece[0] == 'w')) {
+					temp_piece[0] = ip -> piece[1];
+					if(ip -> piece == '\0')
+						temp_piece[1] = '\0';
+					else {
+						temp_piece[1] = ip -> piece[2];
+						temp_piece[2] = '\0';
+					}
+					flag_piece = check_chess_piece(ip -> player, temp_piece);
+					if(flag_piece != -1) {
+						ip -> enum_piece = flag_piece;
+					}
+					ip = find_present_cordinates(ip);
+					if(ip -> px == -1 || ip -> py == -1) {
+						printw("There is something wrong in the program");
+						getch();
+						endwin();
+						exit(1);
+					}
+					i = generate_future_move(ip);
+					check_before_turn(ip, pp, 1);
+					if(i == 0) {
+						printw("There is something wrong in generate future move.");
+						getch();
+						endwin();
+						exit(1);
+					}
+					flag_move = check_chess_ifmove(ip);
+					if(flag_move == 0) {
+						wclrtoeol(inputwin);
+						wprintw(inputwin, "No move available!!\n ");
+						wrefresh(inputwin);
+					}
+					else {
+						highlight_window(win, high_panel, x, y, 0, ip);
+						flag = 1;
+						ip -> enum_piece = flag_piece;
+						break;
+					}
+				}
+				else {
+					wmove(inputwin, (inputmax_y / 4), 0);
+					wclrtoeol(inputwin);
+					wprintw(inputwin, " Invalid piece!!\n ");
+					wclrtoeol(inputwin);
+					wprintw(inputwin, "Enter piece to be moved \n > ");
+					wrefresh(inputwin);
+				}
+					break;
+			default:
+				mvprintw(3, 0, "Wrong Entry.");
+				refresh();
+		}
+		if(flag == 1)
+			break;
+	}
+	return ip;
+}
+
+input *second_type_input_move(input *ip, WINDOW ***win, PANEL **high_panel, WINDOW *inputwin) {
+	int x = 0, y = 0, x1, y1;
+	mvprintw(0, 0, "Use arrow keys to go up and down, Press enter a to select a choice");
+	refresh();
+	init_pair(4, COLOR_RED, COLOR_BLUE);
+	int flag = 0;
+	int c;
+	getyx(inputwin, y1, x1);
+	wclrtoeol(inputwin);
+	wprintw(inputwin, "Enter move ");
+	wrefresh(inputwin);
+	highlight_window(win, high_panel, x, y, 1, ip);
+	int flag_move;
+	while (1) {
+		c = getch();
+			switch(c) {
+			flag = 0;
+			case KEY_UP:
+					highlight_window(win, high_panel, x, y, 0, ip);
+					if(x == 0)
+						x = 7;
+					else
+						x--;
+					highlight_window(win, high_panel, x, y, 1, ip);
+				      
+				     	break;
+			case KEY_DOWN:	highlight_window(win, high_panel, x, y, 0, ip);
+					if(x == 7)
+						x = 0;
+					else
+					 	x++;	
+					highlight_window(win, high_panel, x, y, 1, ip);
+					break;
+			case KEY_RIGHT:highlight_window(win, high_panel, x, y, 0, ip);
+					 if(y == 7)
+						y = 0;
+					 else
+					 	y++;
+					highlight_window(win, high_panel, x, y, 1, ip);
+					break;
+			case KEY_LEFT: 	highlight_window(win, high_panel, x, y, 0, ip);
+					if(y == 0)
+						y = 7;
+					else
+						y--;
+					highlight_window(win, high_panel, x, y, 1, ip);
+					break;
+			case 10:	sprintf(ip -> move, "%d%d", x, y);
+					flag_move = check_chess_move(ip);
+					if(flag_move == 1)
+						flag = 1;
+					else if(flag_move == -1) {
+						wmove(inputwin, y1,x1);
+						wclrtoeol(inputwin);
+						wprintw(inputwin, "NO MOVE AVAILABLE!!");
+						wrefresh(inputwin);
+					}
+					else {
+						wmove(inputwin, y1,x1);
+						wclrtoeol(inputwin);
+						wprintw(inputwin, "\nInvalid move!!\n ");
+						wrefresh(inputwin);
+					}
+					break;
+			default:
+				mvprintw(3, 0, "Wrong Entry!");
+				refresh();
+		}
+		if(flag == 1)
+			break;
+	}
+	return ip;
+}
+
+/*void input_move(WINDOW *inputwin, input *ip) {
+	int x, y;
+	getyx(inputwin, y,x);
+	wprintw(inputwin, "\nEnter move\n > ");
+	wrefresh(inputwin);
+	wclrtoeol(inputwin);
+	wgetstr(inputwin, ip -> move);
+	int flag = 0;
+	
+	while(1) {
+		flag = check_chess_move(ip);
+		if(flag == 1) {
+			break;
+		}
+		else if(flag == -1) {
+			wprintw(inputwin, "No move available!");
+			break;
+		}
+		else {
+			wmove(inputwin, y,x);
+			wclrtoeol(inputwin);
+			wprintw(inputwin, "\nInvalid move!!\n ");
+			wclrtoeol(inputwin);
+			wprintw(inputwin, "Enter move\n > ");
+			wrefresh(inputwin);
+			wclrtoeol(inputwin);
+			wgetstr(inputwin, ip -> move);
+		}
+	}
+	wrefresh(inputwin);
+}*/
+
+/*input *input_piece(WINDOW *inputwin, int inputstart_y, int inputstart_x, input *ip) {
 	int inputmax_x, inputmax_y;
 	getbegyx(inputwin, inputstart_y, inputstart_x);
 	getmaxyx(inputwin, inputmax_y, inputmax_x);
@@ -214,41 +503,11 @@ input *input_piece(WINDOW *inputwin, int inputstart_y, int inputstart_x, input *
     		ip -> piece[i] = tolower(ip -> piece[i]);
 	}	
 	return ip;
-}
+}*/
 
-void input_move(WINDOW *inputwin, input *ip) {
-	int x, y;
-	getyx(inputwin, y,x);
-	wprintw(inputwin, "\nEnter move\n > ");
-	wrefresh(inputwin);
-	wclrtoeol(inputwin);
-	wgetstr(inputwin, ip -> move);
-	int flag = 0;
-	
-	while(1) {
-		flag = check_chess_move(ip);
-		if(flag == 1) {
-			break;
-		}
-		else if(flag == -1) {
-			wprintw(inputwin, "No move available!");
-			break;
-		}
-		else {
-			wmove(inputwin, y,x);
-			wclrtoeol(inputwin);
-			wprintw(inputwin, "\nInvalid move!!\n ");
-			wclrtoeol(inputwin);
-			wprintw(inputwin, "Enter move\n > ");
-			wrefresh(inputwin);
-			wclrtoeol(inputwin);
-			wgetstr(inputwin, ip -> move);
-		}
-	}
-	wrefresh(inputwin);
-}
 
-void move_piece(input *ip, WINDOW ***win, int s, PANEL *high_panel[67]) {
+
+void move_piece(input *ip, WINDOW ***win, int s, PANEL **high_panel) {
 	int movex = (ip -> move[0]) - '0';
 	int movey = (ip -> move[1]) - '0';
 	int k;
@@ -306,7 +565,7 @@ void move_piece(input *ip, WINDOW ***win, int s, PANEL *high_panel[67]) {
 	doupdate();
 }
 
-void highlight_moves(input *ip, WINDOW ***win, PANEL *high_panel[67]) {
+void highlight_moves(input *ip, WINDOW ***win, PANEL **high_panel) {
 	int i = 0;
 	int x, y;
 	init_pair(3, COLOR_BLUE, COLOR_RED);
@@ -335,7 +594,7 @@ void highlight_moves(input *ip, WINDOW ***win, PANEL *high_panel[67]) {
 	
 }
 
-void unhighlight_moves(input *ip, WINDOW ***win, PANEL *high_panel[67]) {
+void unhighlight_moves(input *ip, WINDOW ***win, PANEL **high_panel) {
 	int x, y, k, i = 0;
 	PANEL *top;
 	while((ip -> fm)[i][1] != -1) {
