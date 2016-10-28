@@ -17,8 +17,8 @@ void initpos() {				//Position at the start.
 	strcpy(pp[0][0], "wr1"); strcpy(pp[7][0], "br1");
 	strcpy(pp[0][1], "wn1"); strcpy(pp[7][1], "bn1");
 	strcpy(pp[0][2], "wb1"); strcpy(pp[7][2], "bb1");
-	strcpy(pp[0][3], "wk");  strcpy(pp[7][3], "bk");
-	strcpy(pp[0][4], "wq");  strcpy(pp[7][4], "bq");
+	strcpy(pp[0][3], "wq");  strcpy(pp[7][3], "bq");
+	strcpy(pp[0][4], "wk");  strcpy(pp[7][4], "bk");
 	strcpy(pp[0][5], "wb2"); strcpy(pp[7][5], "bb2");
 	strcpy(pp[0][6], "wn2"); strcpy(pp[7][6], "bn2");
 	strcpy(pp[0][7], "wr2"); strcpy(pp[7][7], "br2");
@@ -113,10 +113,10 @@ void initpiece() {
 	wn1.cp[1] = 1;  wp2.cp[1] = 1;  bn1.cp[1] = 1;  bp2.cp[1] = 1;
 	wb1.cp[0] = 0;  wp3.cp[0] = 1;  bb1.cp[0] = 7;  bp3.cp[0] = 6;
 	wb1.cp[1] = 2;  wp3.cp[1] = 2;  bb1.cp[1] = 2;  bp3.cp[1] = 2;
-	wk.cp[0] = 0;   wp4.cp[0] = 1;  bk.cp[0] = 7;   bp4.cp[0] = 6;
-	wk.cp[1] = 3;   wp4.cp[1] = 3;  bk.cp[1] = 3;   bp4.cp[1] = 3;
-	wq.cp[0] = 0;   wp5.cp[0] = 1;  bq.cp[0] = 7;   bp5.cp[0] = 6;
-	wq.cp[1] = 4;   wp5.cp[1] = 4;  bq.cp[1] = 4;   bp5.cp[1] = 4;
+	wq.cp[0] = 0;   wp4.cp[0] = 1;  bq.cp[0] = 7;   bp4.cp[0] = 6;
+	wq.cp[1] = 3;   wp4.cp[1] = 3;  bq.cp[1] = 3;   bp4.cp[1] = 3;
+	wk.cp[0] = 0;   wp5.cp[0] = 1;  bk.cp[0] = 7;   bp5.cp[0] = 6;
+	wk.cp[1] = 4;   wp5.cp[1] = 4;  bk.cp[1] = 4;   bp5.cp[1] = 4;
 	wb2.cp[0] = 0;  wp6.cp[0] = 1;  bb2.cp[0] = 7;  bp6.cp[0] = 6;
 	wb2.cp[1] = 5;  wp6.cp[1] = 5;  bb2.cp[1] = 5;  bp6.cp[1] = 5;
 	wn2.cp[0] = 0;  wp7.cp[0] = 1;  bn2.cp[0] = 7;  bp7.cp[0] = 6;
