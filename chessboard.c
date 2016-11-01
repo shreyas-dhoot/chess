@@ -19,22 +19,27 @@ void highlight_window(WINDOW ***, PANEL **, int, int, int, input *);
 input *second_type_input_move(input *, WINDOW ***, PANEL **, WINDOW *, int *, int *);
 void help();
 int main(int argc, char *argv[]) {
+	
 	if(argc < 2 || argc > 2) {
-		printf("You must specify 'play'. \nTry './project --help' for more information.\n");
+		printf("You must specify 'play'. \nTry './project --help' for more information.\n");	
+		endwin();
 		return 0;
 	}
 	else {
 		if(strcmp(argv[1], "--help") == 0) {
 			help();
+			endwin();
 			return 0;
 		}
 		else if (strcmp(argv[1], "play") == 0) {
 		}
 		else {
 			printf("You must specify 'play'. \nTry './project --help' for more information.\n");
+			endwin();
 			return 0;
 		}
 	}
+	
 //	char ***pp;
 	initpos();				//initialise starting position
 	init_chess_piece();
@@ -94,6 +99,10 @@ int main(int argc, char *argv[]) {
 		starty = starty + s - 1;		// -1 to overlap square.
 		startx = ((COLS / 2) - (8 * s));
 	}
+	attron(A_BOLD);
+	mvprintw(LINES - 1, COLS / 3,"Press h for help");
+	mvprintw(LINES - 1, (2 * COLS) / 3,"Press q to quit");
+	attroff(A_BOLD);
 	win = newwin((s / 2), (s * 16), starty, startx);//To remove black background of the last squares (bottom), created a white window.
 	panel[64] = new_panel(win);
 	set_panel_userptr(temp, panel[64]);
@@ -110,7 +119,7 @@ int main(int argc, char *argv[]) {
 	temp = panel[66];
 	wbkgd(win, COLOR_PAIR(1));
 	wbkgd(win1, COLOR_PAIR(1));
-	wbkgd(win_input, COLOR_PAIR(2));
+	wbkgd(win_input, COLOR_PAIR(1));
 	wrefresh(win);
 	wrefresh(win1);
 	wrefresh(win_input);
@@ -128,16 +137,6 @@ int main(int argc, char *argv[]) {
 		i = 0;
 		move(1,0);
 		clrtoeol();
-		printw(" In chessboard :- ");
-		while((ip -> fm)[i][1] != -1) {
-			if(ip -> fm[i][1] == -2) {
-				i++;
-				continue;
-			}
-			printw("(%d, %d) ", ip -> fm[i][0], ip -> fm[i][1]);
-			i++;
-		}
-		refresh();
 		ip = second_type_input_move(ip, window, panel, win_input, &prevx, &prevy);
 		if(ip == NULL) {
 			break;
@@ -285,21 +284,39 @@ input *second_type_input(input *ip, WINDOW ***win, PANEL **high_panel, WINDOW *i
 	wmove(inputwin, 0 , 0);
 //	werase(inputwin);
 	wclrtoeol(inputwin);
+	wattron(inputwin, A_BOLD);
+	wattron(inputwin, A_UNDERLINE);
 	if(ip -> player == 1) {
-		wbkgd(inputwin, COLOR_PAIR(1));
-		mvwprintw(inputwin, (inputmax_y) / 8, 2,  "White's turn \n ", ip -> player);
+		mvwprintw(inputwin, 0, 2,  "White's turn\n");
+		wattroff(inputwin, A_BOLD); 
+		wattroff(inputwin, A_UNDERLINE);
+		wprintw(inputwin, "\nSelect piece");
 	}
 	else {
-		wbkgd(inputwin, COLOR_PAIR(2));
-		mvwprintw(inputwin, (inputmax_y) / 8, 2, "Black's turn \n ", ip -> player);
+		mvwprintw(inputwin, 0, 2, "Black's turn\n");
+		wattroff(inputwin, A_BOLD); 
+		wattroff(inputwin, A_UNDERLINE);
+		wprintw(inputwin, "\nSelect piece");
 	}
 	wrefresh(inputwin);
 	highlight_window(win, high_panel, x, y, 1, ip);
 	int flag_piece, flag_move;
 	char temp_piece[3];
 	int flag_quit;
+	int help_flag;
 	while (1) {
-		c = getch();
+		if(help_flag == 1) {
+			c = KEY_UP;
+			help_flag++;
+		}
+		else if(help_flag == 2) {
+			c = KEY_DOWN;
+			help_flag++;
+		}
+		else {
+			c = getch();
+			help_flag = 0;
+		}
 		wmove(inputwin, (3 * (inputmax_y / 4)), 0);
 		wclrtoeol(inputwin);
 		wrefresh(inputwin);
@@ -342,6 +359,20 @@ input *second_type_input(input *ip, WINDOW ***win, PANEL **high_panel, WINDOW *i
 					else
 						y--;
 					highlight_window(win, high_panel, x, y, 1, ip);
+					break;
+			case 72:	
+			case 104:	
+					savetty();		/* Save the tty modes		  */
+					erase();
+					endwin();
+					help();
+					erase();
+					resetty();		/* Return to the previous tty mode*/
+					wbkgd(stdscr, COLOR_PAIR(1));
+					mvprintw(LINES - 1, COLS / 3,"Press h for help");
+					mvprintw(LINES - 1, (2 * COLS) / 3,"Press q to quit");
+					refresh();
+					help_flag = 1;
 					break;
 			case 81:
 			case 113:	wmove(inputwin, (inputmax_y / 4), 0);
@@ -446,13 +477,25 @@ input *second_type_input_move(input *ip, WINDOW ***win, PANEL **high_panel, WIND
 	int inputmax_x, inputmax_y;
 	char choice;
 	getmaxyx(inputwin, inputmax_y, inputmax_x);
-	wmove(inputwin, (inputmax_y) / 8 + 1, 2);
+	wmove(inputwin, 2, 0);
 	wclrtoeol(inputwin);
 	wprintw(inputwin, "Enter move ");
 	wrefresh(inputwin);
 	highlight_window(win, high_panel, x, y, 1, ip);
+	int help_flag = 0;
 	while (1) {
-		c = getch();
+		if(help_flag == 1) {
+			c = KEY_UP;
+			help_flag++;
+		}
+		else if(help_flag == 2) {
+			c = KEY_DOWN;
+			help_flag++;
+		}
+		else {
+			c = getch();
+			help_flag = 0;
+		}
 		wmove(inputwin, (3 * (inputmax_y / 4)), 0);
 		wclrtoeol(inputwin);
 		wrefresh(inputwin);
@@ -496,6 +539,21 @@ input *second_type_input_move(input *ip, WINDOW ***win, PANEL **high_panel, WIND
 						y--;
 					highlight_window(win, high_panel, x, y, 1, ip);
 					break;
+			case 72:	
+			case 104:	
+					savetty();		/* Save the tty modes		  */
+					erase();
+					endwin();
+					help();
+					erase();
+					resetty();		/* Return to the previous tty mode*/
+					wbkgd(stdscr, COLOR_PAIR(1));
+					mvprintw(LINES - 1, COLS / 3,"Press h for help");
+					mvprintw(LINES - 1, (2 * COLS) / 3,"Press q to quit");
+					refresh();
+					help_flag = 1;
+					break;
+
 			case 81:
 			case 113:	wmove(inputwin, (inputmax_y) / 8 + 2, 2);
 					wclrtoeol(inputwin);
@@ -729,7 +787,7 @@ void move_piece(input *ip, WINDOW ***win, int s, PANEL **high_panel) {
 void highlight_moves(input *ip, WINDOW ***win, PANEL **high_panel) {
 	int i = 0;
 	int x, y;
-	init_pair(3, COLOR_BLUE, COLOR_RED);
+	init_pair(3, COLOR_BLUE, COLOR_GREEN);
 	PANEL *top;
 	int k;
 	while((ip -> fm)[i][1] != -1) {
