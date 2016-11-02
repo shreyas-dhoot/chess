@@ -132,8 +132,6 @@ void future_move_rook(int px, int py, int fm[][2], char ***pp) {
 }
 
 void future_move_bishop(int px, int py, int fm[][2], char ***pp, int k, int isbishop) {		//Storing all the future moves of bishop in fm
-	//There should be a condition where after every move it checks for a check.
-	//Initialise fm than add to it.
 	int i;
 	int j;
 	for(i = px + 1, j = py + 1;i < 8 && j < 8;i++, j++) {
