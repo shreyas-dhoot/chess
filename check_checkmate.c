@@ -18,7 +18,7 @@
 #include "functions_chess.h"
 #include "initialise.h"
 #include <string.h>
-int isempty(int fm[][2], int n) {
+int isempty(int fm[][2], int n) {				//to check if future move is empty or not
 	int i;
 	for(i = 0; i < n - 1; i++) {
 		if(fm[i][1] != -1 && fm[i][1] != -2) {
@@ -30,7 +30,7 @@ int isempty(int fm[][2], int n) {
 	}
 	return 1;
 }
-int checkmate(int ifcheck, input *iip) {
+int checkmate(int ifcheck, input *iip) {			//to check if it is checkmate or not
 	input *ip;
 	ip = (input *)malloc(sizeof(input));
 	int k;
@@ -45,12 +45,7 @@ int checkmate(int ifcheck, input *iip) {
 				ip -> py = wr1.cp[1];
 				check_before_turn(ip, pp, 1);
 				k = isempty(wr1.fm, 15);
-	//			printw("%d ", k);
-	//			refresh();
 				init_fm_rook(wr1.fm);
-	//			printw("wr1 ");
-	//			refresh();
-	//			getch();
 				if(k == 0)
 					return 0;
 			}
@@ -62,12 +57,7 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = wn1.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(wn1.fm, 9);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_knight(wn1.fm);
-	//		printw("wn1 ");
-	//		refresh();
-	//		getch();
 			if(k == 0)
 				return 0;
 			}
@@ -79,12 +69,7 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = wb1.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(wb1.fm, 14);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_bishop(wb1.fm);
-	//		printw("wb1 ");
-	//		refresh();
-	//		getch();
 			if(k == 0)
 				return 0;
 			}
@@ -96,12 +81,7 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = wk.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(wk.fm, 12);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_king(wk.fm);
-	//		printw("wk ");
-	//		refresh();
-	//		getch();
 			if(k == 0)
 				return 0;
 			}
@@ -113,12 +93,7 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = wq.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(wq.fm, 28);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_queen(wq.fm);
-	//		printw("wq ");
-	//		refresh();
-	//		getch();
 			if(k == 0)
 				return 0;
 			}
@@ -130,12 +105,7 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = wb2.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(wb2.fm, 14);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_bishop(wb2.fm);
-	//		printw("wb2 ");
-	//		refresh();
-	//		getch();
 			if(k == 0)
 				return 0;
 			}
@@ -147,11 +117,7 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = wn2.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(wn2.fm, 9);
-	//		printw("%d ", k);
 			init_fm_knight(wn2.fm);
-	//		printw("wn2 ");
-	//		refresh();
-	//		getch();
 			if(k == 0)
 				return 0;
 			}
@@ -163,12 +129,7 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = wr2.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(wr2.fm, 15);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_rook(wr2.fm);
-	//		printw("wr2 ");
-	//		refresh();
-	//		getch();
 			if(k == 0)
 				return 0;
 			}
@@ -180,8 +141,6 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = wp1.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(wp1.fm, 5);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_pawn(wp1.fm);
 			if(k == 0)
 				return 0;
@@ -194,12 +153,7 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = wp2.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(wp2.fm, 5);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_pawn(wp2.fm);
-	//		printw("wp2 ");
-	//		refresh();
-	//		getch();
 			if(k == 0)
 				return 0;
 			}
@@ -211,8 +165,6 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = wp3.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(wp3.fm, 5);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_pawn(wp3.fm);
 			if(k == 0)
 				return 0;
@@ -225,8 +177,6 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = wp4.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(wp4.fm, 5);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_pawn(wp4.fm);
 			if(k == 0)
 				return 0;
@@ -239,8 +189,6 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = wp5.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(wp5.fm, 5);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_pawn(wp5.fm);
 			if(k == 0)
 				return 0;
@@ -253,8 +201,6 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = wp6.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(wp6.fm, 5);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_pawn(wp6.fm);
 			if(k == 0)
 				return 0;
@@ -267,8 +213,6 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = wp7.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(wp7.fm, 5);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_pawn(wp7.fm);
 			if(k == 0)
 				return 0;
@@ -281,8 +225,6 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = wp8.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(wp8.fm, 5);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_pawn(wp8.fm);
 			if(k == 0)
 				return 0;
@@ -298,8 +240,6 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = br1.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(br1.fm, 15);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_rook(br1.fm);
 			if(k == 0)
 				return 0;
@@ -312,8 +252,6 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = bn1.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(bn1.fm, 9);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_knight(bn1.fm);
 			if(k == 0)
 				return 0;
@@ -326,8 +264,6 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = bb1.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(bb1.fm, 14);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_bishop(bb1.fm);
 			if(k == 0)
 				return 0;
@@ -340,8 +276,6 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = bk.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(bk.fm, 12);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_king(bk.fm);
 			if(k == 0)
 				return 0;
@@ -354,8 +288,6 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = bq.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(bq.fm, 28);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_queen(bq.fm);
 			if(k == 0)
 				return 0;
@@ -368,8 +300,6 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = bb2.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(bb2.fm, 14);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_bishop(bb2.fm);
 			if(k == 0)
 				return 0;
@@ -382,8 +312,6 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = bn2.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(bn2.fm, 9);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_knight(bn2.fm);
 			if(k == 0)
 				return 0;
@@ -396,8 +324,6 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = br2.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(br2.fm, 15);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_rook(br2.fm);
 			if(k == 0)
 				return 0;
@@ -410,8 +336,6 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = bp1.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(bp1.fm, 5);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_pawn(bp1.fm);
 			if(k == 0)
 				return 0;
@@ -424,8 +348,6 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = bp2.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(bp2.fm, 5);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_pawn(bp2.fm);
 			if(k == 0)
 				return 0;
@@ -438,8 +360,6 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = bp3.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(bp3.fm, 5);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_pawn(bp3.fm);
 			if(k == 0)
 				return 0;
@@ -452,8 +372,6 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = bp4.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(bp4.fm, 5);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_pawn(bp4.fm);
 			if(k == 0)
 				return 0;
@@ -466,8 +384,6 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = bp5.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(bp5.fm, 5);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_pawn(bp5.fm);
 			if(k == 0)
 				return 0;
@@ -480,8 +396,6 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = bp6.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(bp6.fm, 5);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_pawn(bp6.fm);
 			if(k == 0)
 				return 0;
@@ -494,8 +408,6 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = bp7.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(bp7.fm, 5);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_pawn(bp7.fm);
 			if(k == 0)
 				return 0;
@@ -508,8 +420,6 @@ int checkmate(int ifcheck, input *iip) {
 			ip -> py = bp8.cp[1];
 			check_before_turn(ip, pp, 1);
 			k = isempty(bp8.fm, 5);
-	//		printw("%d ", k);
-	//		refresh();
 			init_fm_pawn(bp8.fm);
 			if(k == 0)
 				return 0;
@@ -528,7 +438,7 @@ int check_checkmate_ifknight(int i, int j, input *ip, char ***pp) {
 	}
 	return 0;
 }
-int check(input *ip, char ***pp) {
+int check(input *ip, char ***pp) {			//check if check
 	int kx, ky;
 	char temp_piece[3];
 	int i, j, enum_piece;

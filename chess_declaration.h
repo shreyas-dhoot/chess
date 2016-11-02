@@ -40,18 +40,18 @@ typedef struct pawn {
 	int fm[5][2];
 	int cp[2];		//Current position
 }pawn;
-typedef struct input {
-	int player;
+typedef struct input {		
+	int player;		//stores if white's or black's chance
 	char piece[4];		//color + r1 + \0
-	char move[3];
-	int px;
-	int py;
-	int enum_piece;
-	int (*fm)[2];
+	char move[3];		//stores move of the inputed piece
+	int px;			//stores present x cordinate of inputed piece
+	int py;			//stores present y cordinate of inputed piece
+	int enum_piece;		//stores enum of inputed piece
+	int (*fm)[2];		//points to future move of input piece
 }input;
-char ***pp;
-char *chess_piece[32];
-king wk, bk;
+char ***pp;			// chessboard
+char *chess_piece[32];		//enum of chess pieces
+king wk, bk;			//structure of chess pieces
 queen wq, bq;
 bishop wb1, wb2, bb1, bb2;
 knight wn1, wn2, bn1, bn2;

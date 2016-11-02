@@ -18,18 +18,18 @@
 #include "functions_chess.h"
 #include <string.h>
 #include <stdlib.h>
-void initpos() {				//Position at the start.
+void initpos() {				//Initialise position at the start.
 	int i;
 	int j;
 	pp = (char ***)malloc(sizeof(char **) * 8);
-	for(i = 0;i < 8;i++) {
+	for(i = 0;i < 8;i++) {			//malloc chessboard
 		pp[i] = (char **)malloc(sizeof(char *) * 8);
 		for(j = 0;j < 8;j++) {
 			pp[i][j] = (char *)malloc(sizeof(char) * 4);
 			pp[i][j][0] = '\0';
 		}
 	}
-	strcpy(pp[0][0], "wr1"); strcpy(pp[7][0], "br1");
+	strcpy(pp[0][0], "wr1"); strcpy(pp[7][0], "br1");	//initialise chess piece to their resp. position
 	strcpy(pp[0][1], "wn1"); strcpy(pp[7][1], "bn1");
 	strcpy(pp[0][2], "wb1"); strcpy(pp[7][2], "bb1");
 	strcpy(pp[0][3], "wq");  strcpy(pp[7][3], "bq");
@@ -48,7 +48,7 @@ void initpos() {				//Position at the start.
 	strcpy(pp[1][7], "wp8"); strcpy(pp[6][7], "bp8");
 }
 
-void init_chess_piece() {
+void init_chess_piece() {						//inittialise chess piece (enum)
 	int i;
 	for(i = 0; i < 32; i++) {
 		chess_piece[i] = (char *)malloc(3);
@@ -71,11 +71,11 @@ void init_chess_piece() {
 	strcpy(chess_piece[14], "p7");	strcpy(chess_piece[30], "p7");
 	strcpy(chess_piece[15], "p8");	strcpy(chess_piece[31], "p8");
 }
-
+//Initialising all the future moves.
 void init_fm_king(int fm[][2]) {
 	int i;
 	for(i = 0; i < 12; i++) {
-		fm[i][0] = -1;					//Initialising all the future moves.
+		fm[i][0] = -1;
 		fm[i][1] = -1;
 	}
 }

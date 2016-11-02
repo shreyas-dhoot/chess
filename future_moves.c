@@ -113,7 +113,7 @@ void future_move_rook(int px, int py, int fm[][2], char ***pp) {
 			break;
 		}
 	}
-	for(j = py - 1; j > -1; j--) {
+	for(j = py - 1; j > -1; j--) {				// <--
 		if(pp[px][py][0] == pp[i][j][0])
 			break;
 		else if(pp[i][j][0] == '\0') {

@@ -34,7 +34,7 @@ input *second_type_input_move(input *, WINDOW ***, PANEL **, WINDOW *, int *, in
 void help();
 int main(int argc, char *argv[]) {
 	
-	if(argc < 2 || argc > 2) {
+	if(argc < 2 || argc > 2) {				//Implementing --help option
 		printf("You must specify 'play'. \nTry './project --help' for more information.\n");	
 		endwin();
 		return 0;
@@ -56,21 +56,21 @@ int main(int argc, char *argv[]) {
 	
 //	char ***pp;
 	initpos();				//initialise starting position
-	init_chess_piece();
+	init_chess_piece();			//inittialising enum of chess pieces
 	initpiece();				//Initializing all the attributes of the pieces.
-	input *ip;
+	input *ip;				//stores all info about input
+	ip = (input *)malloc(sizeof(input));
 	int a[1][2];
 	a[0][0] = -1;
 	a[0][1] = -1;
-	ip = (input *)malloc(sizeof(input));
-	ip -> fm = a;
-	WINDOW **window[8];
-	WINDOW *win, *win1, *win_input;
-	int startx, starty, i, j, s, col, inputstart_x = 0, inputstart_y = 0, ifcheck, ifcheckmate, prevx = 0, prevy = 0;
+	ip -> fm = a;				//initialise fm of ip
+	WINDOW **window[8];			//stores 64 windows (chess board)
+	WINDOW *win, *win1, *win_input;		//input window
+	int startx, starty, i, j, s, col, inputstart_x = 0, inputstart_y = 0, ifcheck, ifcheckmate, prevx = 0, prevy = 0;	//prevx and prey is to store present cursor coordinates
 	for(i = 0; i < 8; i++) {
 		window[i] = (WINDOW **)malloc(sizeof(WINDOW *) * 8);
 	}
-	PANEL *panel[67];
+	PANEL *panel[67];			//panel of 64 window (chess board) + input window
 	PANEL *temp;
 	temp = NULL;
 	initscr();
@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
 	wbkgd(stdscr, COLOR_PAIR(1));
 	refresh();
 	char min = ((2 * LINES) > COLS) ? 'c' : 'l';
-	if (min == 'l') {	//deciding the width and height of the square of chessboard
+	if (min == 'l') {			//deciding the width and height of the square of chessboard
 		s = LINES / 8;  
 	}
 	else {
@@ -101,16 +101,15 @@ int main(int argc, char *argv[]) {
 			window[i - 1][j - 1] = create_newwin(s, s, starty, startx, col, i, j);
 			window[i - 1][j - 1] = create_newwin(s, s, starty, startx, col, i, j);
 			panel[((i - 1) * 8) + (j - 1)] = new_panel(window[i - 1][j - 1]);
-			if(i != 1 && j != 1) {
+			if(i != 1 && j != 1) {							//integrating panel with windows
 				set_panel_userptr(temp, panel[((i - 1) * 8) + (j - 1)]);
 			}
 			temp = panel[((i - 1) * 8) + (j - 1)];
 			mvwprintw(window[i -1][j - 1], ((s / 2) - 1), (s - 2), "%s", pp[i -1][j - 1]);
 			wrefresh(window[i - 1][j - 1]);
-			startx = startx + (2 * s) - 1;	// -1 to overlap squares.
-//			usleep(2000000);
+			startx = startx + (2 * s) - 1;			// -1 to overlap squares.
 		}
-		starty = starty + s - 1;		// -1 to overlap square.
+		starty = starty + s - 1;				// -1 to overlap square.
 		startx = ((COLS / 2) - (8 * s));
 	}
 	attron(A_BOLD);
@@ -139,13 +138,12 @@ int main(int argc, char *argv[]) {
 	wrefresh(win_input);
 	ip -> player = 1;
 	while(1) {
-		//Before taking input check for resizing of the window.
-	//	print_chess_piece();
+	//	print_chess_piece();				//print enum of chess pieces
 		ip = second_type_input(ip, window, panel, win_input, &prevx, &prevy);
 		if(ip == NULL) {
 			break;
 		}
-//		ip = input_piece(win_input, inputstart_y, inputstart_x, ip);
+//		ip = input_piece(win_input, inputstart_y, inputstart_x, ip);	//second way for input of piece (by words)
 		
 		highlight_moves(ip, window, panel);
 		i = 0;
@@ -155,13 +153,13 @@ int main(int argc, char *argv[]) {
 		if(ip == NULL) {
 			break;
 		}
-//		input_move(win_input, ip);
-		unhighlight_moves(ip, window, panel);
-		move_piece(ip, window, s, panel);
+//		input_move(win_input, ip);					//second way for input of move (by cordinates)
+		unhighlight_moves(ip, window, panel);				//unhighlight cursor position
+		move_piece(ip, window, s, panel);				//move piece
 		i = initialise_future_move(ip);
 		if(i == 0)
 			printw("There is something wrong in initializing fm.");
-		if(ip -> player == 1)
+		if(ip -> player == 1)						//change turn
 			ip -> player = 0;
 		else
 			ip -> player = 1;
@@ -184,7 +182,7 @@ int main(int argc, char *argv[]) {
 			while(1) {
 				choice = getch();
 				switch(choice) {
-					case 'q':flag = 1;
+					case 'q':case 'Q':flag = 1;
 				}
 				if(flag == 1)
 					break;
@@ -208,7 +206,7 @@ int main(int argc, char *argv[]) {
 			while(1) {
 				choice = getch();
 				switch(choice) {
-					case 'q':flag = 1;
+					case 'q':case 'Q':flag = 1;
 				}
 				if(flag == 1)
 					break;
@@ -238,7 +236,6 @@ int main(int argc, char *argv[]) {
 		}
 		refresh();
 	}
-//	refresh();
 	for(i = 0; i < 8; i++) {
 		for(j = 0; j < 8; j++) {
 			free(pp[i][j]);
@@ -249,7 +246,7 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 
-void highlight_window(WINDOW ***win, PANEL **high_panel, int x, int y, int ifhlt, input *ip) {
+void highlight_window(WINDOW ***win, PANEL **high_panel, int x, int y, int ifhlt, input *ip) {	//ifhlt flag to highlight or unhighlight
 	PANEL *top;
 	int k, flag = 1, i = 0;
 	if(ifhlt) {
@@ -296,7 +293,6 @@ input *second_type_input(input *ip, WINDOW ***win, PANEL **high_panel, WINDOW *i
 	char choice;
 	getmaxyx(inputwin, inputmax_y, inputmax_x);
 	wmove(inputwin, 0 , 0);
-//	werase(inputwin);
 	wclrtoeol(inputwin);
 	wattron(inputwin, A_BOLD);
 	wattron(inputwin, A_UNDERLINE);
@@ -316,8 +312,8 @@ input *second_type_input(input *ip, WINDOW ***win, PANEL **high_panel, WINDOW *i
 	highlight_window(win, high_panel, x, y, 1, ip);
 	int flag_piece, flag_move;
 	char temp_piece[3];
-	int flag_quit;
-	int help_flag = 0;
+	int flag_quit;					//flag when quit option is used
+	int help_flag = 0;				//flag when help option is used
 	while (1) {
 		if(help_flag == 1) {
 			c = KEY_UP;
@@ -334,7 +330,7 @@ input *second_type_input(input *ip, WINDOW ***win, PANEL **high_panel, WINDOW *i
 		wmove(inputwin, (3 * (inputmax_y / 4)), 0);
 		wclrtoeol(inputwin);
 		wrefresh(inputwin);
-			switch(c) {
+			switch(c) {				//keyboard inputs (navigate with arrow keys, enter to select, h for help, q to quit)
 			flag = 0;
 			case KEY_UP:	
 					wmove(inputwin, (inputmax_y / 4), 0);
@@ -514,7 +510,7 @@ input *second_type_input_move(input *ip, WINDOW ***win, PANEL **high_panel, WIND
 		wclrtoeol(inputwin);
 		wrefresh(inputwin);
 
-			switch(c) {
+			switch(c) {				//keyboard inputs (navigate with arrow keys, enter to select, h for help, q to quit)
 			flag = 0;
 			case KEY_UP:	wmove(inputwin, (inputmax_y) / 8 + 2, 2);
 					wclrtoeol(inputwin);
@@ -627,7 +623,7 @@ input *second_type_input_move(input *ip, WINDOW ***win, PANEL **high_panel, WIND
 	return ip;
 }
 
-/*void input_move(WINDOW *inputwin, input *ip) {
+/*void input_move(WINDOW *inputwin, input *ip) {		//input piece (words)
 	int x, y;
 	getyx(inputwin, y,x);
 	wprintw(inputwin, "\nEnter move\n > ");
@@ -659,7 +655,7 @@ input *second_type_input_move(input *ip, WINDOW ***win, PANEL **high_panel, WIND
 	wrefresh(inputwin);
 }*/
 
-/*input *input_piece(WINDOW *inputwin, int inputstart_y, int inputstart_x, input *ip) {
+/*input *input_piece(WINDOW *inputwin, int inputstart_y, int inputstart_x, input *ip) { 	//input move (co-ordinates)
 	int inputmax_x, inputmax_y;
 	getbegyx(inputwin, inputstart_y, inputstart_x);
 	getmaxyx(inputwin, inputmax_y, inputmax_x);
@@ -859,10 +855,9 @@ void unhighlight_moves(input *ip, WINDOW ***win, PANEL **high_panel) {
 
 
 
-WINDOW *create_newwin(int height, int width, int starty, int startx, int col, int j, int k) {//j represents row no.
-	WINDOW *local_win;
+WINDOW *create_newwin(int height, int width, int starty, int startx, int col, int j, int k) {	//j represents row no.
+	WINDOW *local_win;									//create chessboard
 	local_win = newwin(width , (2 *  width) , starty, startx);
-//	usleep(2000000);
 	if(col == 0) {
 		wbkgd(local_win, COLOR_PAIR(1));
 		wrefresh(local_win);		/* Show that box 		*/
@@ -874,7 +869,7 @@ WINDOW *create_newwin(int height, int width, int starty, int startx, int col, in
 	return local_win;
 }
 
-input *find_present_cordinates(input *ip) {
+input *find_present_cordinates(input *ip) {							//find present coordinates of input piece
 	int i, j;
 	for(i = 0; i < 8; i++) {
 		for(j = 0; j < 8; j++) {
