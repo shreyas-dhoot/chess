@@ -1,4 +1,4 @@
-chess: initialisechesspiece.o chessboard.o check_things.o future_moves.o check_checkmate.o help.o
+project: initialisechesspiece.o chessboard.o check_things.o future_moves.o check_checkmate.o help.o
 	gcc initialisechesspiece.o chessboard.o check_things.o future_moves.o check_checkmate.o help.o -o project -lncurses -lpanel
 initialisechesspiece.o: initialisechesspiece.c
 	gcc -c initialisechesspiece.c -Wall

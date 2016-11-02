@@ -1,5 +1,5 @@
 #ifndef __CHECK__H
-#define __CHECK_H
+#define __CHECK__H
 
 void store_future_move_king(int, int, int, int, int [][2], char ***);
 void future_move_king(int, int, int [][2], char ***);

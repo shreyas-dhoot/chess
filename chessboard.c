@@ -303,7 +303,7 @@ input *second_type_input(input *ip, WINDOW ***win, PANEL **high_panel, WINDOW *i
 	int flag_piece, flag_move;
 	char temp_piece[3];
 	int flag_quit;
-	int help_flag;
+	int help_flag = 0;
 	while (1) {
 		if(help_flag == 1) {
 			c = KEY_UP;
@@ -413,7 +413,7 @@ input *second_type_input(input *ip, WINDOW ***win, PANEL **high_panel, WINDOW *i
 				strcpy(ip -> piece, pp[x][y]);
 				if((ip -> player == 0 && ip -> piece[0] == 'b') || (ip -> player == 1 && ip -> piece[0] == 'w')) {
 					temp_piece[0] = ip -> piece[1];
-					if(ip -> piece == '\0')
+					if(ip -> piece[2] == '\0')
 						temp_piece[1] = '\0';
 					else {
 						temp_piece[1] = ip -> piece[2];

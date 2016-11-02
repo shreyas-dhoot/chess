@@ -1,5 +1,5 @@
 #ifndef __INITIALISE__H
-#define __INITIALISE_H
+#define __INITIALISE__H
 
 void initpos();
 void init_chess_piece();

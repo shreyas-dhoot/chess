@@ -1,5 +1,5 @@
 #ifndef __DECLERATION__H
-#define __DECLERATION_H
+#define __DECLERATION__H
 typedef struct king {
 	int fm[12][2];		//Future moves
 	int cp[2];		//Current position
